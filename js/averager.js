@@ -1,4 +1,6 @@
-// Add closure to keep track of the counter
+/**
+ * Add closure to keep track of the counter
+ */
 var add = (function() {
 	var counter = 0;
 	return function() {
@@ -51,20 +53,10 @@ function reset() {
 	img.src = 'imgs/default.jpg';
 }
 
-/**
- * Load the image into the canvas
- */
-window.onload = function() {
-    var c=document.getElementById("imgZone");
-    var ctx=c.getContext("2d");
-    var img="/imgs/default.jpg";
-    ctx.drawImage(img,10,10);
-};
-
 
 /**
  * A WORK IN PROGRESS
- * 
+ *
  * Going to average the colors of the surrounding pixels
  */
 function average() {

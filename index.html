@@ -9,14 +9,38 @@
 <script type='text/javascript' src='js/averager.js'></script>
 <script type='text/javascript'>
 window.onload=function(){
+	var content = document.getElementById('imgWrapper');
 	var canvas = document.getElementById('imgZone');
 	var context = canvas.getContext('2d');
 	var imageObj = new Image();
 	imageObj.src = 'imgs/tall.jpg';
-	
+
+	var imageRatio = imageObj.width / imageObj.height;
+	var canvasRatio = canvas.width / canvas.height;
+  var setHeight = 0;
+	var setWidth = 0;
+
+  // Resize the canvas if the image is too small
+	if (imageRatio > 1) {
+	  // Image is wider than tall
+		setWidth = content.offsetHeight * imageRatio;
+		setHeight = content.offsetHeight;
+	} else {
+		// Image is taller than wide
+		setWidth = content.offsetWidth;
+		setHeight = content.offsetWidth / imageRatio;
+	}
+
+	if (setHeight > content.offsetHeight) {
+		setWidth = setWidth * (content.offsetHeight / setHeight);
+		setHeight = content.offsetHeight;
+	}
+
 	imageObj.onload = function() {
+		canvas.height = setHeight;
+		canvas.width = setWidth;
 	  context.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height,
-			  0, 0, canvas.width, canvas.height);
+			  0, 0, setWidth, setHeight);
 	};
 }
 </script>
@@ -25,35 +49,35 @@ window.onload=function(){
 
 <body>
 	<div class="wrapper">
-		
+
 		<div class="content-left">
-			<div class="centering">
+			<div class="centering" id="imgWrapper">
     			<canvas id="imgZone">You need to be able to use HTML canvas tags to use this!</canvas>
 			</div>
 		</div>
-		
-		
+
+
 		<div class="content-right">
 			<div class="centering">
 			<h1>Image Averager</h1>
-			
+
 			<hr>
-			
+
 			<p>
-			Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-			Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-			when an unknown printer took a galley of type and scrambled it to make a type 
-			specimen book. It has survived not only five centuries, but also the leap into 
-			electronic typesetting, remaining essentially unchanged. It was popularised in 
-			the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-			and more recently with desktop publishing software like Aldus PageMaker 
+			Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+			Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+			when an unknown printer took a galley of type and scrambled it to make a type
+			specimen book. It has survived not only five centuries, but also the leap into
+			electronic typesetting, remaining essentially unchanged. It was popularised in
+			the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+			and more recently with desktop publishing software like Aldus PageMaker
 			including versions of Lorem Ipsum.
 			</p>
-			
+
 			<hr>
-			
+
 			<div style="text-align: center;">
-				<input id="avgButton" type="button" value="Average" onclick="average();" />    	
+				<input id="avgButton" type="button" value="Average" onclick="average();" />
     		</div>
     		</div>
     	</div>
