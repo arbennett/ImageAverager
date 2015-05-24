@@ -13,16 +13,18 @@ window.onload=function(){
 	var canvas = document.getElementById('imgZone');
 	var context = canvas.getContext('2d');
 	var imageObj = new Image();
-	imageObj.src = 'imgs/tall.jpg';
+	imageObj.src = 'imgs/default.jpg';
 
-	var imageRatio = imageObj.width / imageObj.height;
+    imageWidth = imageObj.width;
+    imageHeight = imageObj.height;
+    var imageRatio = imageObj.width / imageObj.height;
 	var canvasRatio = canvas.width / canvas.height;
-  var setHeight = 0;
-	var setWidth = 0;
+    setHeight = 0;
+	setWidth = 0;
 
-  // Resize the canvas if the image is too small
+    // Resize the canvas if the image is too small or big
 	if (imageRatio > 1) {
-	  // Image is wider than tall
+	    // Image is wider than tall
 		setWidth = content.offsetHeight * imageRatio;
 		setHeight = content.offsetHeight;
 	} else {
@@ -35,11 +37,14 @@ window.onload=function(){
 		setWidth = setWidth * (content.offsetHeight / setHeight);
 		setHeight = content.offsetHeight;
 	}
-
+    
+    if (setHeight > imageHeight) { setHeight = imageHeight; }
+    if (setWidth > imageWidth) { setWidth = imageWidth; }
+    console.log(setHeight + " " + setWidth);
 	imageObj.onload = function() {
 		canvas.height = setHeight;
 		canvas.width = setWidth;
-	  context.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height,
+	    context.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height,
 			  0, 0, setWidth, setHeight);
 	};
 }
@@ -64,21 +69,18 @@ window.onload=function(){
 			<hr>
 
 			<p>
-			Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-			Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-			when an unknown printer took a galley of type and scrambled it to make a type
-			specimen book. It has survived not only five centuries, but also the leap into
-			electronic typesetting, remaining essentially unchanged. It was popularised in
-			the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
-			and more recently with desktop publishing software like Aldus PageMaker
-			including versions of Lorem Ipsum.
+			The Image Averager is a cellular automata based image manipulation application
+			that blends images based on nearby pixels.  Use the Average button to try it out
+			or upload your own image first.  
 			</p>
 
 			<hr>
 
 			<div style="text-align: center;">
 				<input id="avgButton" type="button" value="Average" onclick="average();" />
-    		</div>
+				<input id="uploadButton" type="button" value="Upload" onclick="upload();" />
+
+				</div>
     		</div>
     	</div>
     </div>

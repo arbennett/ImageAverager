@@ -60,13 +60,36 @@ function reset() {
  * Going to average the colors of the surrounding pixels
  */
 function average() {
-	var img = document.getElementById('thePic');
-
+	var canvas = document.getElementById('imgZone');
+	var image = canvas.getContext('2d');
+	var imageData = image.getImageData(0,0,imageWidth,imageHeight);
+	var r, g, b, a, count, pixel, data, rgba;
 	// Loop through all the pixels
-	for (i = 1; i < img.width - 1; i++) {
-		for (j = 1; j < img.height - 1; j++) {
-			// do something
-		}
-	}
+	for (i = 1; i < imageWidth - 1; i++) {
+		for (j = 1; j < imageHeight - 1; j++) {
+			r = 0; g = 0; b = 0; a = 0; count = 0;
+            idx = (i + j * imageWidth) * 4; 
+            for (ii = -1; ii < 1; ii++) {
+				for (jj = -1; jj < 1; jj++) {
+                    temp_idx = ((i+ii) + (j+jj) * imageWidth) * 4;
+					r += imageData.data[temp_idx + 0];
+					g += imageData.data[temp_idx + 1];
+					b += imageData.data[temp_idx + 2];
+					a += imageData.data[temp_idx + 3];
+					count += 1;
+				}
+			}
+            imageData.data[idx+0] = Math.floor((r + 0.5) / count);
+			imageData.data[idx+1] = Math.floor((g + 0.5) / count);
+            imageData.data[idx+2] = Math.floor((b + 0.5) / count);
+			imageData.data[idx+3] = Math.floor((a + 0.5) / count);
+	     }   
+    }
+    image.putImageData(imageData,0,0);
+	console.log("done!");
+}
 
+
+function upload() {
+	//do nothing
 }

@@ -31,11 +31,12 @@ html, body {
 .centering {
 	display: table-cell;
 	vertical-align: middle;
-	height: 100%;
+	text-align: center;
+    height: 100%;
 }
 
 .middle {
-    display: block-inline;
+    display: inline-block;
     top: 20%;
     position: relative;
 }
