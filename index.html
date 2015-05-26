@@ -3,52 +3,12 @@
 
 <head>
 <title>Image Averager</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 <link rel="stylesheet" type="text/css" href="css/averager.css">
 <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
 <script type='text/javascript' src='js/averager.js'></script>
-<script type='text/javascript'>
-window.onload=function(){
-	var content = document.getElementById('imgWrapper');
-	var canvas = document.getElementById('imgZone');
-	var context = canvas.getContext('2d');
-	var imageObj = new Image();
-	imageObj.src = 'imgs/default.jpg';
 
-    imageWidth = imageObj.width;
-    imageHeight = imageObj.height;
-    var imageRatio = imageObj.width / imageObj.height;
-	var canvasRatio = canvas.width / canvas.height;
-    setHeight = 0;
-	setWidth = 0;
-
-    // Resize the canvas if the image is too small or big
-	if (imageRatio > 1) {
-	    // Image is wider than tall
-		setWidth = content.offsetHeight * imageRatio;
-		setHeight = content.offsetHeight;
-	} else {
-		// Image is taller than wide
-		setWidth = content.offsetWidth;
-		setHeight = content.offsetWidth / imageRatio;
-	}
-
-	if (setHeight > content.offsetHeight) {
-		setWidth = setWidth * (content.offsetHeight / setHeight);
-		setHeight = content.offsetHeight;
-	}
-    
-    if (setHeight > imageHeight) { setHeight = imageHeight; }
-    if (setWidth > imageWidth) { setWidth = imageWidth; }
-    console.log(setHeight + " " + setWidth);
-	imageObj.onload = function() {
-		canvas.height = setHeight;
-		canvas.width = setWidth;
-	    context.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height,
-			  0, 0, setWidth, setHeight);
-	};
-}
-</script>
 </head>
 
 
@@ -63,28 +23,90 @@ window.onload=function(){
 
 
 		<div class="content-right">
-			<div class="centering">
-			<h1>Image Averager</h1>
+	        <div class="centering">
+		    	<h1>Image Averager</h1>
 
-			<hr>
+	    		<hr>
 
-			<p>
-			The Image Averager is a cellular automata based image manipulation application
-			that blends images based on nearby pixels.  Use the Average button to try it out
-			or upload your own image first.  
-			</p>
+    			<p>
+    			The Image Averager is a cellular automata based image 
+                manipulation application
+    			that blends images based on nearby pixels.  
+                Use the Average button to try it out
+    			or upload your own image first.  
+	    		</p>
 
-			<hr>
+    			<hr>
 
-			<div style="text-align: center;">
-				<input id="avgButton" type="button" value="Average" onclick="average();" />
-				<input id="uploadButton" type="button" value="Upload" onclick="upload();" />
+                <br/>
+    			<div style="text-align: center;">
+                    <label class="interactive">
+                        <input id="avgButton" class="interactive" type="button" onclick="average();" />
+                        <span>Average</span>
+                    </label>
+                    
+                    <label class="interactive">
+                        <input id="uploader" type="file" required/>
+                        <span>Upload</span>
+                    </label>
 
-				</div>
+		        </div>
     		</div>
     	</div>
     </div>
 </body>
+
+<script type='text/javascript'>
+var loader = document.getElementById('uploader');
+loader.addEventListener('change', upload);
+</script>
+
+<script type='text/javascript'>
+window.onload=function() {
+    
+    var content = document.getElementById('imgWrapper'); 
+	var canvas = document.getElementById('imgZone');
+	var context = canvas.getContext('2d');
+	var imageObj = new Image();
+	imageObj.src = 'imgs/default.jpg';
+
+    imageObj.onload = function() {
+        imageWidth = imageObj.width;
+        imageHeight = imageObj.height;
+        var imageRatio = imageObj.width / imageObj.height;
+        var canvasRatio = canvas.width / canvas.height;
+        setHeight = 0;
+        setWidth = 0;
+
+        // Resize the canvas if the image is too small or big
+        if (imageRatio > 1) {
+            // Image is wider than tall
+        	setWidth = content.offsetHeight * imageRatio;
+        	setHeight = content.offsetHeight;
+        } else {
+        	// Image is taller than wide
+        	setWidth = content.offsetWidth;
+        	setHeight = content.offsetWidth / imageRatio;
+        }
+
+        // Scale the image vertically
+        if (setHeight > content.offsetHeight) {
+        	setWidth = setWidth * (content.offsetHeight / setHeight);
+        	setHeight = content.offsetHeight;
+        }
+        
+        // If the image is smaller than the canvas, shrink the canvas
+        if (setHeight > imageHeight) { setHeight = imageHeight; }
+        if (setWidth > imageWidth) { setWidth = imageWidth; }
+
+        // Draw the image
+		canvas.height = setHeight;
+		canvas.width = setWidth;
+	    context.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height,
+			  0, 0, setWidth, setHeight);
+	};
+}
+</script>
 
 
 </html>

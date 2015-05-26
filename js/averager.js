@@ -1,62 +1,4 @@
 /**
- * Add closure to keep track of the counter
- */
-var add = (function() {
-	var counter = 0;
-	return function() {
-		return counter += 1;
-	}
-})();
-
-
-/**
- * Change the counter text
- */
-function change() {
-	var myNewTitle = add();
-	var title = document.getElementById('title');
-	title.innerHTML = 'You have pressed the button ' + myNewTitle + ' times!';
-}
-
-
-/**
- * Find out how big the displayed image is
- */
-function inspect() {
-	var img = document.getElementById('thePic');
-	var info = document.getElementById('picInfo');
-	info.innerHTML = 'This image is ' + img.width + ' pixels wide and '
-			+ img.height + ' pixels tall!';
-}
-
-
-/**
- * Load a new image
- */
-function update() {
-	var address = document.getElementById('imageAddress').value;
-	if (address.length == 0) {
-		return;
-	}
-	var info = document.getElementById('picInfo');
-	info.innerHTML = 'New image set to ' + address;
-	var img = document.getElementById('thePic');
-	img.src = address;
-}
-
-
-/**
- * Go back to the default picture
- */
-function reset() {
-	var img = document.getElementById('thePic');
-	img.src = 'imgs/default.jpg';
-}
-
-
-/**
- * A WORK IN PROGRESS
- *
  * Going to average the colors of the surrounding pixels
  */
 function average() {
@@ -90,6 +32,61 @@ function average() {
 }
 
 
-function upload() {
-	//do nothing
+/**
+ *  Set a new image in the canvas
+ */
+function upload(e) {
+	console.log("You've pressed the upload button!");
+    var content = document.getElementById('imgWrapper'); 
+    var canvas = document.getElementById('imgZone');
+    var context = canvas.getContext('2d');
+    var reader = new FileReader();
+    reader.onload = function(event) {
+        var imageObj = new Image();
+        imageObj.src = event.target.result;
+        
+        console.log("preparing to load the new image");
+        imageObj.onload = function() {
+            imageWidth = imageObj.width;
+            imageHeight = imageObj.height;
+            var imageRatio = imageObj.width / imageObj.height;
+            var canvasRatio = canvas.width / canvas.height;
+            setHeight = 0;
+            setWidth = 0;
+            
+           console.log(setWidth + " " + setHeight); 
+
+            // Resize the canvas if the image is too small or big
+            if (imageRatio > 1) {
+                // Image is wider than tall
+            	setWidth = content.offsetHeight * imageRatio;
+            	setHeight = content.offsetHeight;
+            } else {
+            	// Image is taller than wide
+            	setWidth = content.offsetWidth;
+            	setHeight = content.offsetWidth / imageRatio;
+            }
+           console.log(setWidth + " " + setHeight); 
+
+            // Scale the image vertically
+            if (setHeight > content.offsetHeight) {
+            	setWidth = setWidth * (content.offsetHeight / setHeight);
+            	setHeight = content.offsetHeight;
+            }
+            console.log(setWidth + " " + setHeight); 
+            
+            // If the image is smaller than the canvas, shrink the canvas
+            if (setHeight > imageHeight) { setHeight = imageHeight; }
+            if (setWidth > imageWidth) { setWidth = imageWidth; }
+    
+            // Draw the image
+    		canvas.height = setHeight;
+    		canvas.width = setWidth;
+            console.log(setWidth + " " + setHeight);
+    	    context.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height,
+    			  0, 0, setWidth, setHeight);
+    	};
+    
+    }
+    reader.readAsDataURL(e.target.files[0]);
 }
